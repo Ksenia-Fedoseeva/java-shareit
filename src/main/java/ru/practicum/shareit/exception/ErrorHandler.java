@@ -16,6 +16,7 @@ public class ErrorHandler {
         Error error = new Error(e.getMessage());
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public ResponseEntity<Error> handleEmailAlreadyExists(EmailAlreadyExistsException e) {
         Error error = new Error(e.getMessage());

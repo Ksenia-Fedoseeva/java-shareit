@@ -16,9 +16,10 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class InMemoryItemRepository implements ItemRepository{
+public class InMemoryItemRepository implements ItemRepository {
     private final UserRepository inMemoryUserRepository;
     private final Map<Long, Item> items = new HashMap<>();
+
     @Override
     public Item createItem(ItemDto itemDto, Long userId) {
         Item item = new Item();
@@ -26,6 +27,7 @@ public class InMemoryItemRepository implements ItemRepository{
         item.setName(itemDto.getName());
         item.setDescription(itemDto.getDescription());
         item.setAvailable(itemDto.getAvailable());
+
         if (inMemoryUserRepository.getUserById(userId) != null) {
             item.setOwner(userId);
         } else {

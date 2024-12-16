@@ -11,6 +11,7 @@ import java.util.Map;
 @Component
 public class InMemoryUserRepository implements UserRepository {
     private final Map<Long, User> users = new HashMap<>();
+
     @Override
     public User getUserById(Long id) {
         User user = users.get(id);

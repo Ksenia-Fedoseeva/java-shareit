@@ -7,8 +7,12 @@ import java.util.List;
 
 public interface ItemRepository {
     Item createItem(ItemDto itemDto, Long userId);
+
     Item updateItem(Long itemId, ItemDto itemDto, Long userId);
+
     Item getItemById(Long itemId);
+
     List<Item> getAllItemsByUser(Long userId);
+
     List<Item> searchItems(String text);
 }

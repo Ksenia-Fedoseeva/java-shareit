@@ -28,6 +28,7 @@ public class ItemService {
     public List<Item> getAllItemsByUser(Long userId) {
         return inMemoryItemRepository.getAllItemsByUser(userId);
     }
+
     public List<Item> searchItems(String text) {
         return inMemoryItemRepository.searchItems(text);
     }
