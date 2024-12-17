@@ -1,7 +1,6 @@
 package ru.practicum.shareit.user.repository;
 
 import org.springframework.stereotype.Component;
-import ru.practicum.shareit.exception.EmailAlreadyExistsException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.model.User;
 
@@ -25,10 +24,6 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public User addUser(User user) {
-        if (findByEmail(user.getEmail()) != null) {
-            throw new EmailAlreadyExistsException("Пользователь с таким email уже существует");
-        }
-
         user.setId(getNextId());
         users.put(user.getId(), user);
         return user;
@@ -36,9 +31,6 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public User updateUser(User user) {
-        if (findByEmail(user.getEmail()) != null) {
-            throw new EmailAlreadyExistsException("Пользователь с таким email уже существует");
-        }
         users.put(user.getId(), user);
         return user;
     }
@@ -48,6 +40,7 @@ public class InMemoryUserRepository implements UserRepository {
         users.remove(id);
     }
 
+    @Override
     public User findByEmail(String email) {
         return users.values().stream()
                 .filter(user -> user.getEmail() != null)

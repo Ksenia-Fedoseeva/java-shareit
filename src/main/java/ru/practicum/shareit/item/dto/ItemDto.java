@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.annotations.ValidationGroup;
+//import ru.practicum.shareit.annotations.ValidationGroup;
 
 
 /**
@@ -15,10 +16,14 @@ import ru.practicum.shareit.annotations.ValidationGroup;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ItemDto {
+    private Long id;
+
     @NotBlank(groups = ValidationGroup.OnCreate.class)
     private String name;
+
     @NotBlank(groups = ValidationGroup.OnCreate.class)
     private String description;
+
     @NotNull(groups = ValidationGroup.OnCreate.class)
     private Boolean available;
 }
