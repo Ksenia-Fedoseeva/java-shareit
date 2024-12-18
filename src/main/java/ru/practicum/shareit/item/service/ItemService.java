@@ -21,11 +21,10 @@ public class ItemService {
 
     public ItemDto createItem(ItemDto itemDto, Long userId) {
         Item item = ItemMapper.toItem(itemDto);
-        if (userRepository.getUserById(userId) != null) {
-            item.setOwner(userId);
-        } else {
+        if (userRepository.getUserById(userId) == null) {
             throw new NotFoundException("Пользователя с id " + userId + " не существует");
         }
+        item.setOwner(userId);
         itemRepository.createItem(item);
         return ItemMapper.toItemDto(item);
     }
@@ -39,10 +38,10 @@ public class ItemService {
             throw new AccessDeniedException("Вы не владелец вещи");
         }
 
-        if (itemDto.getName() != null && !itemDto.getName().isEmpty()) {
+        if (itemDto.getName() != null && !itemDto.getName().isBlank()) {
             item.setName(itemDto.getName());
         }
-        if (itemDto.getDescription() != null && !itemDto.getDescription().isEmpty()) {
+        if (itemDto.getDescription() != null && !itemDto.getDescription().isBlank()) {
             item.setDescription(itemDto.getDescription());
         }
         if (itemDto.getAvailable() != null) {

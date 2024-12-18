@@ -42,7 +42,7 @@ public class InMemoryItemRepository implements ItemRepository {
 
     @Override
     public List<Item> searchItems(String text) {
-        if (text == null || text.trim().isEmpty()) {
+        if (text == null || text.trim().isBlank()) {
             return Collections.emptyList();
         }
         String searchText = text.toLowerCase();

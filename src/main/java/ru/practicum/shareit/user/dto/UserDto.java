@@ -11,8 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserDto {
     private Long id;
+    @NotBlank(message = "Имя должно быть указано")
     private String name;
-    @NotBlank(message = "Email должен быть указан.")
+    @NotBlank(message = "Email должен быть указан")
     @Email(message = "Email должен содержать символ @")
     private String email;
 }
