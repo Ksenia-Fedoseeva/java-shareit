@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.annotations.ValidationGroup;
-//import ru.practicum.shareit.annotations.ValidationGroup;
-
 
 /**
  * TODO Sprint add-controllers.

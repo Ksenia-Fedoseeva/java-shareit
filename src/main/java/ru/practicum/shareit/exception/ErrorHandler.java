@@ -34,6 +34,6 @@ public class ErrorHandler {
     public ResponseEntity<Error> handleAccessDeniedException(AccessDeniedException e) {
         log.error("Ошибка", e);
         Error error = new Error(e.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
     }
 }
