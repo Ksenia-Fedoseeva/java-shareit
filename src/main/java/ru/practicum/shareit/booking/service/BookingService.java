@@ -72,9 +72,9 @@ public class BookingService {
     }
 
     public BookingResponseDto getBookingById(Long bookingId, Long userId) {
-        /*if (!userRepository.existsById(userId)) {
+        if (!userRepository.existsById(userId)) {
             throw new NotFoundException("Пользователь с id " + userId + " не найден");
-        }*/
+        }
 
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Бронирование c id " + bookingId + " не найдено"));
@@ -87,9 +87,9 @@ public class BookingService {
     }
 
     public List<BookingResponseDto> getBookings(Long userId, String state, Boolean forOwner) {
-        /*if (!userRepository.existsById(userId)) {
+        if (!userRepository.existsById(userId)) {
             throw new NotFoundException("Пользователь с id " + userId + " не найден");
-        }*/
+        }
 
         BookingState bookingState = BookingState.fromString(state);
 
