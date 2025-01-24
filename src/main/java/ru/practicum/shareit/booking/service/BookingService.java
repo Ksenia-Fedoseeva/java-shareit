@@ -44,9 +44,13 @@ public class BookingService {
             throw new ValidationException("Эта вещь сейчас недоступна для бронирования");
         }
 
-        Booking booking = BookingMapper.toBooking(bookingRequestDto, item);
-        booking.setBooker(booker);
-        booking.setStatus(Status.WAITING);
+        if (bookingRepository.existsByItemIdAndStatusAndStartBeforeAndEndAfter(
+                bookingRequestDto.getItemId(), Status.APPROVED,
+                bookingRequestDto.getEnd(), bookingRequestDto.getStart())) {
+            throw new ValidationException("Выбранные даты пересекаются с уже подтвержденным бронированием");
+        }
+
+        Booking booking = BookingMapper.toBooking(bookingRequestDto, item, booker);
 
         booking = bookingRepository.save(booking);
 
@@ -94,8 +98,8 @@ public class BookingService {
         BookingState bookingState = BookingState.fromString(state);
 
         List<Booking> bookings = forOwner
-                ? bookingRepository.findBookingsForOwner(userId)
-                : bookingRepository.findBookingsForBooker(userId);
+                ? bookingRepository.findByItemOwnerIdOrderByStartDesc(userId)
+                : bookingRepository.findByBookerIdOrderByStartDesc(userId);
 
         LocalDateTime now = LocalDateTime.now();
         bookings = bookings.stream()

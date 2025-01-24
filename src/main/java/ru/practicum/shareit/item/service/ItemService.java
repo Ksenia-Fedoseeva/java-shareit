@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
+import ru.practicum.shareit.booking.enums.Status;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.AccessDeniedException;
@@ -108,10 +109,11 @@ public class ItemService {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Вещь с id " + itemId + " не найдена"));
 
-        Boolean isBookingComplete = bookingRepository.existsByBookerAndItemAndEndBefore(author, item, LocalDateTime.now());
+        Boolean isBookingComplete = bookingRepository.existsByBookerAndItemAndEndBeforeAndStatus(
+                author, item, LocalDateTime.now(), Status.APPROVED);
 
         if (!isBookingComplete) {
-            throw new ValidationException("Оставить отзыв возможно только по истечение срока аренды вещи");
+            throw new ValidationException("Оставить отзыв возможно только по истечение срока аренды вещи подтвержденного бронирования");
         }
 
         Comment comment = new Comment(commentRequestDto.getText(), author, item, LocalDateTime.now());
