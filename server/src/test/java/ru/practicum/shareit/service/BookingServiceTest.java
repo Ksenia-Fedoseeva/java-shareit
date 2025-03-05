@@ -9,10 +9,10 @@ import ru.practicum.shareit.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
 import ru.practicum.shareit.booking.enums.Status;
 import ru.practicum.shareit.booking.service.BookingService;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.service.ItemService;
-import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.service.UserService;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
 
@@ -26,17 +26,17 @@ class BookingServiceTest {
     @Autowired
     private BookingService bookingService;
     @Autowired
-    private UserService userService;
+    private UserRepository userRepository;
     @Autowired
-    private ItemService itemService;
+    private ItemRepository itemRepository;
 
     @Test
     void testCreateBooking() {
-        UserDto owner = userService.addUser(new UserDto(null, "Gina", "gina@example.com"));
-        UserDto booker = userService.addUser(new UserDto(null, "Hank", "hank@example.com"));
+        User owner = userRepository.save(new User(null, "Gina", "gina@example.com"));
+        User booker = userRepository.save(new User(null, "Hank", "hank@example.com"));
 
-        ItemDto item = itemService.createItem(new ItemDto(null, "Bike", "Mountain bike",
-                true, null), owner.getId());
+        Item item = itemRepository.save(new Item(null, "Bike", "Mountain bike", true,
+                owner, null));
 
         BookingRequestDto bookingRequest = new BookingRequestDto(LocalDateTime.now().plusDays(1),
                 LocalDateTime.now().plusDays(2), item.getId());
@@ -48,11 +48,11 @@ class BookingServiceTest {
 
     @Test
     void testApproveBooking() {
-        UserDto owner = userService.addUser(new UserDto(null, "Ivy", "ivy@example.com"));
-        UserDto booker = userService.addUser(new UserDto(null, "Jake", "jake@example.com"));
+        User owner = userRepository.save(new User(null, "Ivy", "ivy@example.com"));
+        User booker = userRepository.save(new User(null, "Jake", "jake@example.com"));
 
-        ItemDto item = itemService.createItem(new ItemDto(null, "Laptop", "Gaming laptop",
-                true, null), owner.getId());
+        Item item = itemRepository.save(new Item(null, "Laptop", "Gaming laptop", true,
+                owner, null));
 
         BookingRequestDto bookingRequest = new BookingRequestDto(LocalDateTime.now().plusDays(1),
                 LocalDateTime.now().plusDays(2), item.getId());

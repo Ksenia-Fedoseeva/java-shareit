@@ -9,7 +9,6 @@ import ru.practicum.shareit.annotations.ValidationGroup;
 import ru.practicum.shareit.item.dto.CommentRequestDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 
-
 @Validated
 @RestController
 @RequestMapping("/items")

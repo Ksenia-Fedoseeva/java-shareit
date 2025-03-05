@@ -12,6 +12,7 @@ import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.Optional;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -26,7 +27,6 @@ public class UserService {
         return UserMapper.toUserDto(createdUser);
     }
 
-    @Transactional
     public UserDto updateUser(UserDto userDto) {
         User user = userRepository.findById(userDto.getId())
                 .orElseThrow(() -> new NotFoundException("Пользователь с id " + userDto.getId() + " не найден"));
@@ -53,11 +53,13 @@ public class UserService {
         }
     }
 
+    @Transactional(readOnly = true)
     public UserDto getUserDtoById(Long id) {
         User user = getUserById(id);
         return UserMapper.toUserDto(user);
     }
 
+    @Transactional(readOnly = true)
     public User getUserById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id " + id + " не найден"));

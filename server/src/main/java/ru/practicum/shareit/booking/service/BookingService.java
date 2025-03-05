@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class BookingService {
@@ -57,7 +58,6 @@ public class BookingService {
         return BookingMapper.toResponseDto(booking);
     }
 
-    @Transactional
     public BookingResponseDto approveBooking(Long bookingId, Long userId, Boolean approved) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Бронирование c id " + bookingId + " не найдено"));
@@ -75,6 +75,7 @@ public class BookingService {
         return BookingMapper.toResponseDto(booking);
     }
 
+    @Transactional(readOnly = true)
     public BookingResponseDto getBookingById(Long bookingId, Long userId) {
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException("Пользователь с id " + userId + " не найден");
@@ -90,6 +91,7 @@ public class BookingService {
         return BookingMapper.toResponseDto(booking);
     }
 
+    @Transactional(readOnly = true)
     public List<BookingResponseDto> getBookings(Long userId, String state, Boolean forOwner) {
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException("Пользователь с id " + userId + " не найден");

@@ -23,25 +23,26 @@ import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.repository.ItemRequestRepository;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.service.UserService;
+import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class ItemService {
     private final ItemRepository itemRepository;
-    private final UserService userService;
+    private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
     private final ItemRequestRepository itemRequestRepository;
 
-    @Transactional
     public ItemDto createItem(ItemDto itemDto, Long userId) {
-        User user = userService.getUserById(userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь с id " + userId + " не найден"));
         ItemRequest request = null;
 
         if (itemDto.getRequestId() != null) {
@@ -55,7 +56,6 @@ public class ItemService {
         return ItemMapper.toItemDto(item);
     }
 
-    @Transactional
     public ItemDto updateItem(Long itemId, ItemDto itemDto, Long userId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Вещь с id " + itemId + " не найдена"));
@@ -77,6 +77,7 @@ public class ItemService {
         return ItemMapper.toItemDto(item);
     }
 
+    @Transactional(readOnly = true)
     public ItemResponseDto getItemById(Long itemId, Long userId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Вещь с id " + itemId + " не найдена"));
@@ -102,11 +103,13 @@ public class ItemService {
         return ItemMapper.toItemResponseDto(item, lastBooking, nextBooking, comments);
     }
 
+    @Transactional(readOnly = true)
     public List<ItemDto> getAllItemsByUser(Long userId) {
         List<Item> items = itemRepository.getItemsByOwnerId(userId);
         return items.stream().map(ItemMapper::toItemDto).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<ItemDto> searchItems(String text) {
         if (text == null || text.isBlank()) {
             return Collections.emptyList();
@@ -116,7 +119,8 @@ public class ItemService {
     }
 
     public CommentResponseDto addComment(Long userId, Long itemId, CommentRequestDto commentRequestDto) {
-        User author = userService.getUserById(userId);
+        User author = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь с id " + userId + " не найден"));
 
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Вещь с id " + itemId + " не найдена"));

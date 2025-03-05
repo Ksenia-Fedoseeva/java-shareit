@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.annotations.ValidationGroup;
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
